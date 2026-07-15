@@ -16,9 +16,9 @@ Route::prefix('auth')->group(function () {
         Route::get('/me', [AuthController::class,  'me']);
     });
 });
-// Route::apiResource('drivers', DriverController::class)->only(['index', 'show']);
-// Route::middleware('auth:sanctum')->group(function () {
-// Route::apiResource('drivers', DriverController::class)->except(['index', 'show']);
-// });
+Route::apiResource('drivers', DriverController::class)->only(['index', 'show']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('drivers', DriverController::class)->except(['index', 'show']);
+});
 
-Route::apiResource('drivers', DriverController::class);
+// Route::apiResource('drivers', DriverController::class);

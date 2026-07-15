@@ -7,6 +7,7 @@ use App\Http\Requests\Driver\StoreDriverRequest;
 use App\Http\Requests\Driver\UpdateDriverRequest;
 use App\Http\Resources\DriverResource;
 use App\Models\User;
+use App\Services\DriverService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,23 +15,21 @@ use Illuminate\Support\Facades\Hash;
 class DriverController extends Controller
 {
     use ApiResponse;
+    public function __construct(
+        private DriverService $driverService
+    ) {}
+
     public function index()
     {
-        $drivers = User::where('role', 'driver')->get();
+        $drivers = $this->driverService->getDrivers();
         return $this->success(DriverResource::collection($drivers), 'Drivers fetched successfully', 200);
     }
 
     public function store(StoreDriverRequest $request)
     {
-        $data = $request->validated();
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'phone' => $data['phone'] ?? null,
-            'role' => 'driver',
-            'is_active' => $data['is_active'],
-        ]);
+        $user = $this->driverService->addDriver(
+            $request->validated()
+        );
         return $this->success(
             new DriverResource($user),
             'Driver created successfully',
@@ -39,26 +38,23 @@ class DriverController extends Controller
     }
     public function show(string $id)
     {
-        $driver = User::where('role', 'driver')->findOrFail($id);
+        $driver = $this->driverService->getDriver($id);
         return $this->success(new DriverResource($driver), 'Driver fetched successfully', 200);
     }
 
     public function update(UpdateDriverRequest  $request, string $id)
     {
-        $driver = User::where('role', 'driver')->findOrFail($id);
-        $data = $request->validated();
-        if (isset($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        }
-        $driver->update($data);
+        $driver = $this->driverService->updateDriver(
+            $request->validated(),
+            $id
+        );
         return $this->success(new DriverResource($driver), 'Driver updated successfully', 200);
     }
 
 
     public function destroy(string $id)
     {
-        $driver = User::where('role', 'driver')->findOrFail($id);
-        $driver->delete();
+        $this->driverService->deleteDriver($id);
         return $this->success(null, 'Driver deleted successfully', 200);
     }
 }
