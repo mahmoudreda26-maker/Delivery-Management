@@ -30,6 +30,7 @@ class AuthService
 
     public function logout()
     {
+      
         $user = auth()->user();
 
         if ($user) {
@@ -40,6 +41,7 @@ class AuthService
 
     public function me()
     {
+      
         return auth()->user();
     }
 }

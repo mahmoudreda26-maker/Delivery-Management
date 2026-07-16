@@ -1,0 +1,1014 @@
+{
+  "info": {
+    "_postman_id": "dc6177cd-194e-434e-b523-d5e6003b46ff",
+    "name": "Delivery Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48217942"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();\r",
+                  "pm.environment.set(\"token\", response.data.token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"ahmed@example.com\",\r\n  \"password\": \"12345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Drivers",
+      "item": [
+        {
+          "name": "getAllDrivers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/drivers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getDriver",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/drivers/7",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AddDriver",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Ahmed Elabrass\",\r\n    \"email\": \"ahm111@example.com\",\r\n    \"password\": \"12345678\",\r\n    \"phone\": \"01012345678\",\r\n    \"is_active\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/drivers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updateDriver",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Ahmed aa5sa5s5as4as\",\r\n    \"phone\": \"01208448556\"\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/drivers/7",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteDriver",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Ahmed Mohamed33333333\"\r\n    \"phone\": \"01208448556\",\r\n\r\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/drivers/7",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Vehicles",
+      "item": [
+        {
+          "name": "GetAllVehicles",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_0rph}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/vehicles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "GetAllVehicles",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/vehicles",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "vehicles"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": ":status",
+                  "value": 200
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 16 Jul 2026 20:23:49 GMT"
+                },
+                {
+                  "key": "host",
+                  "value": "speciously-unnautical-gianni.ngrok-free.dev"
+                },
+                {
+                  "key": "ngrok-agent-ips",
+                  "value": "156.197.122.108"
+                },
+                {
+                  "key": "x-powered-by",
+                  "value": "PHP/8.2.12"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"data\": [],\n    \"message\": \"Vehicles retrieved successfully.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "AddVehicle",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true
+            }
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_0rph}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"plate_number\": \"أ ب ج 1234\",\r\n    \"model\": \"Toyota Hilux\",\r\n    \"type\": \"truck\", \r\n    \"status\": \"idle\",\r\n    \"year\": 2024\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vehicles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "AddVehicle",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"plate_number\": \"أ ب ج 1234\",\r\n    \"model\": \"Toyota Hilux\",\r\n    \"type\": \"truck\", \r\n    \"status\": \"idle\",\r\n    \"year\": 2024\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/vehicles",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "vehicles"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": ":status",
+                  "value": 201
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 16 Jul 2026 20:47:23 GMT"
+                },
+                {
+                  "key": "host",
+                  "value": "speciously-unnautical-gianni.ngrok-free.dev"
+                },
+                {
+                  "key": "ngrok-agent-ips",
+                  "value": "156.197.122.108"
+                },
+                {
+                  "key": "x-powered-by",
+                  "value": "PHP/8.2.12"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 1,\n        \"driver_id\": null,\n        \"plate_number\": \"أ ب ج 1234\",\n        \"model\": \"Toyota Hilux\",\n        \"type\": \"truck\",\n        \"status\": \"idle\",\n        \"year\": 2024,\n        \"created_at\": \"2026-07-16T20:47:23+00:00\"\n    },\n    \"message\": \"Vehicle created successfully.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "GetVehicle",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true,
+            "disabledSystemHeaders": {
+              "accept": true
+            }
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_0rph}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vehicles/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "GetVehicle",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"plate_number\": \"أ ب ج 1234\",\r\n    \"model\": \"Toyota Hilux\",\r\n    \"type\": \"truck\", \r\n    \"status\": \"idle\",\r\n    \"year\": 2024,\r\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/vehicles/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "vehicles",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": ":status",
+                  "value": 200
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 16 Jul 2026 20:55:40 GMT"
+                },
+                {
+                  "key": "host",
+                  "value": "speciously-unnautical-gianni.ngrok-free.dev"
+                },
+                {
+                  "key": "ngrok-agent-ips",
+                  "value": "156.197.122.108"
+                },
+                {
+                  "key": "x-powered-by",
+                  "value": "PHP/8.2.12"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 1,\n        \"driver_id\": null,\n        \"plate_number\": \"أ ب ج 1234\",\n        \"model\": \"Toyota Hilux\",\n        \"type\": \"truck\",\n        \"status\": \"idle\",\n        \"year\": 2024,\n        \"created_at\": \"2026-07-16T20:47:23+00:00\",\n        \"driver\": null\n    },\n    \"message\": \"Vehicle details retrieved.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "UpdateVehicle",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_0rph}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"plate_number\": \"أ د ج 1234\", \r\n    \"model\": \"Toyota Hilux - Updated\",\r\n    \"type\": \"truck\",\r\n    \"status\": \"active\",\r\n    \"year\": 2025,\r\n    \"driver_id\": null \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vehicles/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "UpdateVehicle",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"plate_number\": \"أ د ج 1234\", \r\n    \"model\": \"Toyota Hilux - Updated\",\r\n    \"type\": \"truck\",\r\n    \"status\": \"active\",\r\n    \"year\": 2025,\r\n    \"driver_id\": null \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/vehicles/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "vehicles",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": ":status",
+                  "value": 200
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 16 Jul 2026 21:04:18 GMT"
+                },
+                {
+                  "key": "host",
+                  "value": "speciously-unnautical-gianni.ngrok-free.dev"
+                },
+                {
+                  "key": "ngrok-agent-ips",
+                  "value": "156.197.122.108"
+                },
+                {
+                  "key": "x-powered-by",
+                  "value": "PHP/8.2.12"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 1,\n        \"driver_id\": null,\n        \"plate_number\": \"أ د ج 1234\",\n        \"model\": \"Toyota Hilux - Updated\",\n        \"type\": \"truck\",\n        \"status\": \"active\",\n        \"year\": 2025,\n        \"created_at\": \"2026-07-16T20:47:23+00:00\",\n        \"driver\": null\n    },\n    \"message\": \"Vehicle updated successfully.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "AssignDriver",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_0rph}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"driver_id\": \"2\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vehicles/1/assign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles",
+                "1",
+                "assign"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "AssignDriver",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"driver_id\": \"2\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/vehicles/1/assign",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "vehicles",
+                    "1",
+                    "assign"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": ":status",
+                  "value": 200
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 16 Jul 2026 21:23:07 GMT"
+                },
+                {
+                  "key": "host",
+                  "value": "speciously-unnautical-gianni.ngrok-free.dev"
+                },
+                {
+                  "key": "ngrok-agent-ips",
+                  "value": "156.197.122.108"
+                },
+                {
+                  "key": "x-powered-by",
+                  "value": "PHP/8.2.12"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 1,\n        \"driver_id\": 2,\n        \"plate_number\": \"أ د ج 1234\",\n        \"model\": \"Toyota Hilux - Updated\",\n        \"type\": \"truck\",\n        \"status\": \"active\",\n        \"year\": 2025,\n        \"created_at\": \"2026-07-16T20:47:23+00:00\",\n        \"driver\": {\n            \"id\": 2,\n            \"name\": \"Ahmed Elabrass\",\n            \"phone\": \"01012345678\"\n        }\n    },\n    \"message\": \"Driver assigned to vehicle successfully.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "DeleteVehicle",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_0rph}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vehicles/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "DeleteVehicle",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"plate_number\": \"أ د ج 1234\", \r\n    \"model\": \"Toyota Hilux - Updated\",\r\n    \"type\": \"truck\",\r\n    \"status\": \"active\",\r\n    \"year\": 2025,\r\n    \"driver_id\": null \r\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/vehicles/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "vehicles",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.2.12"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 16 Jul 2026 22:48:03 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"data\": null,\n    \"message\": \"Vehicle deleted successfully.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "LiveLocations",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_0rph}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vehicles/live",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles",
+                "live"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "LiveLocations",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/vehicles/live",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "vehicles",
+                    "live"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.2.12"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 16 Jul 2026 22:50:16 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"data\": [],\n    \"message\": \"Live locations retrieved successfully.\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    },
+    {
+      "key": "auth_secret_0rph",
+      "secret": true
+    }
+  ]
+}
