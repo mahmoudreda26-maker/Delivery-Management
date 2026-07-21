@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DriverController;
+use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\VehicleController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('auth')->group(function () {
 
@@ -14,8 +16,6 @@ Route::prefix('auth')->group(function () {
 
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
-
-        
         Route::apiResource('drivers', DriverController::class);
 
         Route::middleware('role:manager')->group(function () {
@@ -23,6 +23,6 @@ Route::prefix('auth')->group(function () {
             Route::apiResource('vehicles', VehicleController::class);
             Route::patch('vehicles/{id}/assign', [VehicleController::class, 'assignDriver']);
         });
-
+        Route::post('/locations', [LocationController::class, 'store']);
     });
 });
