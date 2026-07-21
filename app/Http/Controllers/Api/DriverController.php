@@ -30,11 +30,7 @@ class DriverController extends Controller
         $user = $this->driverService->addDriver(
             $request->validated()
         );
-        return $this->success(
-            new DriverResource($user),
-            'Driver created successfully',
-            201
-        );
+        return $this->success(new DriverResource($user),'Driver created successfully',201);
     }
     public function show(string $id)
     {
