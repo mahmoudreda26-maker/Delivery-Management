@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\VehicleController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\LocationController;
+
 
 Route::prefix('auth')->group(function () {
 
@@ -33,4 +35,10 @@ Route::middleware(['auth:sanctum', 'role:manager'])->group(function () {
     
     Route::apiResource('vehicles', VehicleController::class);
     Route::patch('vehicles/{id}/assign', [VehicleController::class, 'assignDriver']);
+});
+
+/**************************************** Location ******************************/
+
+Route::middleware(['auth:sanctum', 'role:driver'])->group(function () {
+    Route::post('/locations', [LocationController::class, 'store']);
 });
