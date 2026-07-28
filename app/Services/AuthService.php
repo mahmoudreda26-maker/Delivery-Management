@@ -14,19 +14,31 @@ class AuthService
         array $credentials,
         RefreshTokenService $refreshTokenService,
         LoginHistoryServiec $loginHistoryServiec,
+        FailedLoginAttemptService $failedLoginAttemptService,
         Request $request,
     ) {
-        $user = User::where('email', $credentials['email'])->first();
+        if (!Auth::attempt($credentials)) {
+            $failedLoginAttemptService->store(
+                $credentials['email'],
+                $request->ip(),
+                $request->userAgent(),
+                'invalid_credentials'
+            );
 
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['Invalid credentials'],
+                'email' => ['Invalid credentials.'],
             ]);
         }
 
+
+        $user = Auth::user();
+
         $token = $user->createToken('auth_token')->plainTextToken;
+
         $loginHistoryServiec->store($user, $request);
+
         $refreshToken = $refreshTokenService->issue($user);
+
         return [
             'user' => $user,
             'token' => $token,
