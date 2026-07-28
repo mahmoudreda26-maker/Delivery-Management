@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\LoginHistoryController;
+use App\Models\FailedLoginAttempt;
 use Illuminate\Support\Facades\Route;
 
 
@@ -41,4 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('login-history/last', [LoginHistoryController::class, 'show']);
     Route::put('login-history/logout', [LoginHistoryController::class, 'update']);
     Route::delete('login-history/old', [LoginHistoryController::class, 'destroy']);
+
+    Route::get('failed-attempt', [FailedLoginAttempt::class, 'index']);
+    Route::delete('failed-attempt/old', [FailedLoginAttempt::class, 'destroy']);
 });
