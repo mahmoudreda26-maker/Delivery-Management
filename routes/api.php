@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DriverController;
+use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\VehicleController;
+use App\Http\Controllers\Api\LoginHistoryController;
+use App\Models\FailedLoginAttempt;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\LocationController;
@@ -10,31 +13,40 @@ use App\Http\Controllers\Api\LocationController;
 
 Route::prefix('auth')->group(function () {
 
-    Route::post('/login', [AuthController::class,  'login']);
+    Route::post('/login', [AuthController::class, 'login'])
+        ->middleware('throttle:login');
 
     Route::middleware('auth:sanctum')->group(function () {
 
-        Route::post('/logout', [AuthController::class,  'logout']);
-
-        Route::get('/me', [AuthController::class,  'me']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/me', [AuthController::class, 'me']);
     });
 });
-Route::apiResource('drivers', DriverController::class)->only(['index', 'show']);
+
+
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('drivers', DriverController::class)->except(['index', 'show']);
-});
 
-// Route::apiResource('drivers', DriverController::class);
+    Route::apiResource('drivers', DriverController::class);
 
-/********************************* Vehicles ***********************************/
 
-Route::middleware(['auth:sanctum', 'role:manager'])->group(function () {
-    
-   
-    Route::get('vehicles/live', [VehicleController::class, 'live']);
-    
-    Route::apiResource('vehicles', VehicleController::class);
-    Route::patch('vehicles/{id}/assign', [VehicleController::class, 'assignDriver']);
+    Route::middleware('role:driver')->group(function () {
+
+        Route::get('vehicles/live', [VehicleController::class, 'live']);
+        Route::apiResource('vehicles', VehicleController::class);
+        Route::patch('vehicles/{id}/assign', [VehicleController::class, 'assignDriver']);
+    });
+
+
+    Route::post('/locations', [LocationController::class, 'store']);
+
+    Route::get('login-history', [LoginHistoryController::class, 'index']);
+    Route::post('login-history', [LoginHistoryController::class, 'store']);
+    Route::get('login-history/last', [LoginHistoryController::class, 'show']);
+    Route::put('login-history/logout', [LoginHistoryController::class, 'update']);
+    Route::delete('login-history/old', [LoginHistoryController::class, 'destroy']);
+
+    Route::get('failed-attempt', [FailedLoginAttempt::class, 'index']);
+    Route::delete('failed-attempt/old', [FailedLoginAttempt::class, 'destroy']);
 });
 
 /**************************************** Location ******************************/

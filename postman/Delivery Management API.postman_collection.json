@@ -1,10 +1,9 @@
 {
   "info": {
-    "_postman_id": "d9b763d6-a67b-47f3-9094-aa82e6c4a8e4",
+    "_postman_id": "30013361-1fef-4c59-9803-75f7743daed4",
     "name": "Delivery Management API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "54233559",
-    "_collection_link": "https://go.postman.co/collection/54233559-d9b763d6-a67b-47f3-9094-aa82e6c4a8e4?source=collection_link"
+    "_exporter_id": "25500179"
   },
   "item": [
     {
@@ -54,7 +53,10 @@
           "name": "Me",
           "request": {
             "method": "GET",
-            "header": []
+            "header": [],
+            "url": {
+              "raw": ""
+            }
           },
           "response": []
         },
@@ -62,7 +64,155 @@
           "name": "Logout",
           "request": {
             "method": "GET",
-            "header": []
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Drivers",
+      "item": [
+        {
+          "name": "getAllDrivers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/drivers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getDriver",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/drivers/7",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AddDriver",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Ahmed Elabrass\",\r\n    \"email\": \"ahm111@example.com\",\r\n    \"password\": \"12345678\",\r\n    \"phone\": \"01012345678\",\r\n    \"is_active\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/drivers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updateDriver",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Ahmed aa5sa5s5as4as\",\r\n    \"phone\": \"01208448556\"\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/drivers/7",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteDriver",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Ahmed Mohamed33333333\"\r\n    \"phone\": \"01208448556\",\r\n\r\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/drivers/7",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers",
+                "7"
+              ]
+            }
           },
           "response": []
         }

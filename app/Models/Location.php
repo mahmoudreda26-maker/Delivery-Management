@@ -25,4 +25,9 @@ class Location extends Model
     {
         return $this->belongsTo(Vehicle::class);
     }
+
+     public function lastvehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
 }
