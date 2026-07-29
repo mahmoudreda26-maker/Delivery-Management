@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\LoginHistoryController;
 use App\Models\FailedLoginAttempt;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\LocationController;
+
 
 Route::prefix('auth')->group(function () {
 
@@ -45,4 +47,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('failed-attempt', [FailedLoginAttempt::class, 'index']);
     Route::delete('failed-attempt/old', [FailedLoginAttempt::class, 'destroy']);
+});
+
+/**************************************** Location ******************************/
+
+Route::middleware(['auth:sanctum', 'role:driver'])->group(function () {
+    Route::post('/locations', [LocationController::class, 'store']);
 });

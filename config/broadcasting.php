@@ -28,6 +28,10 @@ return [
     |
     */
 
+    'auth' => [
+    'guards' => ['api', 'sanctum'],
+],
+
     'connections' => [
 
         'reverb' => [
