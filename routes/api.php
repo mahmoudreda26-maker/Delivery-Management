@@ -8,7 +8,6 @@ use App\Http\Controllers\Api\LoginHistoryController;
 use App\Models\FailedLoginAttempt;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Api\LocationController;
 
 
 Route::prefix('auth')->group(function () {
