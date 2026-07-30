@@ -11,13 +11,10 @@ Route::prefix('auth')->group(function () {
 
     Route::post('/login', [AuthController::class, 'login'])
         ->middleware('throttle:login');
-
     Route::middleware('auth:sanctum')->group(function () {
-
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
         Route::apiResource('drivers', DriverController::class);
-
         Route::middleware('role:manager')->group(function () {
             Route::get('vehicles/live', [VehicleController::class, 'live']);
             Route::apiResource('vehicles', VehicleController::class);
@@ -26,3 +23,4 @@ Route::prefix('auth')->group(function () {
         Route::post('/locations', [LocationController::class, 'store']);
     });
 });
+Route::get('/locations/history', [LocationController::class, 'history']);

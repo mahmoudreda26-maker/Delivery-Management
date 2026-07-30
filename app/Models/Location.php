@@ -25,4 +25,13 @@ class Location extends Model
     {
         return $this->belongsTo(Vehicle::class);
     }
+
+    public function scopeForVehicle($query, $vehicleId)
+    {
+        return $query->where('vehicle_id', $vehicleId);
+    }
+    public function scopeForDate($query, $date)
+    {
+        return $query->whereDate('created_at', $date);
+    }
 }
