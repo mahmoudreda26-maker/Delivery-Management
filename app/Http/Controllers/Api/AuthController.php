@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\UserResource;
 use App\Services\AuthService;
+use App\Services\FailedLoginAttemptService;
+use App\Services\LoginHistoryServiec;
+use App\Services\RefreshTokenService;
 use App\Traits\ApiResponse;
 
 
@@ -15,20 +18,40 @@ class AuthController extends Controller
     use ApiResponse;
 
 
-    public function login(LoginRequest $request, AuthService $authService)
-    {
-        $data =  $authService->login($request->validated());
-        return $this->success([
-            'user' => new UserResource($data['user']),
-            'token' => $data['token'],
-        ], 'Login successful');
-    }
-    public function logout(AuthService $authService)
-    {
-        $authService->logout();
+public function login(
+    LoginRequest $request,
+    AuthService $authService,
+    RefreshTokenService $refreshTokenService,
+    LoginHistoryServiec $loginHistoryServiec,
+    FailedLoginAttemptService $failedLoginAttemptService
+) {
+    $data = $authService->login(
+        $request->validated(),
+        $refreshTokenService,
+        $loginHistoryServiec,
+        $failedLoginAttemptService,
+        $request,
+    );
+
+    return $this->success([
+        'user' => new UserResource($data['user']),
+        'token' => $data['token'],
+        'refresh_token' => $data['refresh_token'],
+    ], 'Login successful');
+}
+
+
+
+    public function logout(
+        AuthService $authService,
+        RefreshTokenService $refreshTokenService
+    ) {
+        $authService->logout($refreshTokenService);
 
         return $this->success(null, 'Logout successful');
     }
+
+    
     public function me(AuthService $authService)
     {
 
