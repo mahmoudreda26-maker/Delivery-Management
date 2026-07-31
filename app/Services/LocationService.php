@@ -11,17 +11,14 @@ class LocationService
     public function store(array $data)
     {
         $user = Auth::user();
-
         if ($user->vehicles->isEmpty()) {
             throw ValidationException::withMessages([
                 'vehicle' => ['The current user does not have a vehicle.'],
             ]);
         }
-
         $vehicle = $user->vehicles->first();
-
         $location = Location::create([
-           'user_id' => $user->id,
+            'user_id' => $user->id,
             'vehicle_id' => $vehicle->id,
             'latitude'   => $data['latitude'],
             'longitude'  => $data['longitude'],
@@ -33,5 +30,12 @@ class LocationService
         ]);
 
         return $location;
+    }
+    public function history(array $data)
+    {
+        return Location::forVehicle($data['vehicle_id'])
+            ->forDate($data['date'])
+            ->oldest()
+            ->get();
     }
 }
