@@ -14,30 +14,24 @@ use App\Traits\ApiResponse;
 class LocationController extends Controller
 {
     use ApiResponse;
-<<<<<<< HEAD
-    public function store(LocationRequest $request, LocationService $locationService)
-    {
-        $data =   $locationService->store($request->validated());
-=======
 
     public function store(LocationRequest $request, LocationService $locationService)
     {
         $data = $locationService->store($request->validated());
 
-        $vehicle = Vehicle::where('user_id', auth('api')->id())->first();
+        $vehicle = Vehicle::where('user_id', auth()->id())->first();
 
         if ($vehicle) {
             event(new LocationUpdated($vehicle));
         }
 
->>>>>>> c90ed1ac852b92c6c8cf0895b0572806541e36ca
         return $this->success(
             new LocationResource($data),
             'Operation successful',
             201
         );
     }
-<<<<<<< HEAD
+
     public function history(LocationHistoryRequest $request, LocationService $locationService)
     {
         $locations = $locationService->history(
@@ -50,6 +44,3 @@ class LocationController extends Controller
         );
     }
 }
-=======
-}
->>>>>>> c90ed1ac852b92c6c8cf0895b0572806541e36ca

@@ -8,7 +8,11 @@ use App\Http\Controllers\Api\LoginHistoryController;
 use App\Models\FailedLoginAttempt;
 use Illuminate\Support\Facades\Route;
 
-
+Route::get('/test', function () {
+    return response()->json([
+        'status' => 'Laravel Working'
+    ]);
+});
 
 Route::prefix('auth')->group(function () {
 
@@ -43,7 +47,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('failed-attempt/old', [FailedLoginAttempt::class, 'destroy']);
 });
 
-/**************************************** Location ******************************/
 
 Route::middleware(['auth:sanctum', 'role:driver'])->group(function () {
     Route::post('/locations', [LocationController::class, 'store']);
