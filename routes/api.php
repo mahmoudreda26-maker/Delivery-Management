@@ -1,26 +1,25 @@
 <?php
 
+use App\Http\Controllers\Api\ActivityLogController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\LocationController;
-use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\LoginHistoryController;
+use App\Http\Controllers\Api\VehicleController;
 use App\Models\FailedLoginAttempt;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/test', function () {
-    return response()->json([
-        'status' => 'Laravel Working'
-    ]);
-});
+
 
 Route::prefix('auth')->group(function () {
-
+        Route::get('/activity-logs', [ActivityLogController::class, 'index']);
+        Route::get('/activity-logs/{activityLog}', [ActivityLogController::class, 'show']);
     Route::post('/login', [AuthController::class, 'login'])
         ->middleware('throttle:login');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
+
     });
 });
 

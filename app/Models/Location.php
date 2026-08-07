@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\ActivityLog;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Location extends Model
 {
@@ -35,4 +37,8 @@ class Location extends Model
     {
         return $query->whereDate('created_at', $date);
     }
+    public function activityLogs(): MorphMany
+{
+    return $this->morphMany(ActivityLog::class, 'subject');
+}
 }

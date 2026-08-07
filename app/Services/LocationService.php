@@ -8,17 +8,24 @@ use Illuminate\Validation\ValidationException;
 
 class LocationService
 {
+    public function __construct(
+        protected ActivityLogService $activityLogService
+    ) {}
+
     public function store(array $data)
     {
         $user = Auth::user();
+
         if ($user->vehicles->isEmpty()) {
             throw ValidationException::withMessages([
                 'vehicle' => ['The current user does not have a vehicle.'],
             ]);
         }
+
         $vehicle = $user->vehicles->first();
+
         $location = Location::create([
-            'user_id' => $user->id,
+            'user_id'    => $user->id,
             'vehicle_id' => $vehicle->id,
             'latitude'   => $data['latitude'],
             'longitude'  => $data['longitude'],
@@ -29,8 +36,17 @@ class LocationService
             'status' => 'active',
         ]);
 
+        $this->activityLogService->log(
+            user: $user,
+            subject: $location,
+            event: 'created',
+            description: 'Location created successfully.',
+            request: request()
+        );
+
         return $location;
     }
+
     public function history(array $data)
     {
         return Location::forVehicle($data['vehicle_id'])

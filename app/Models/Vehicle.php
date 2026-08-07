@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\ActivityLog;
 use App\Models\Location;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Vehicle extends Model
 {
@@ -35,4 +36,9 @@ class Vehicle extends Model
 
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function activityLogs(): MorphMany
+{
+    return $this->morphMany(ActivityLog::class, 'subject');
+}
 }

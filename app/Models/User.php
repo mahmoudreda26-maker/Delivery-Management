@@ -7,8 +7,10 @@ use App\Models\RefreshToken;
 use App\Models\Vehicle;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\ActivityLog;
 use Laravel\Sanctum\HasApiTokens;
 use Override;
 
@@ -70,5 +72,9 @@ class User extends Authenticatable
     public function login_histories()
     {
         return $this->hasMany(LoginHistory::class);
+    }
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(ActivityLog::class);
     }
 }

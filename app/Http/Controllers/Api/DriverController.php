@@ -9,8 +9,7 @@ use App\Http\Resources\DriverResource;
 use App\Models\User;
 use App\Services\DriverService;
 use App\Traits\ApiResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+
 
 class DriverController extends Controller
 {
