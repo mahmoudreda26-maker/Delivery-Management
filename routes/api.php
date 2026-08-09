@@ -28,13 +28,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('drivers', DriverController::class);
 
-
-    Route::middleware('role:driver')->group(function () {
-
-        Route::get('vehicles/live', [VehicleController::class, 'live']);
-        Route::apiResource('vehicles', VehicleController::class);
-        Route::patch('vehicles/{id}/assign', [VehicleController::class, 'assignDriver']);
-    });
+    Route::apiResource('vehicles', VehicleController::class);
+    Route::patch('vehicles/{id}/assign', [VehicleController::class, 'assignDriver']);
+    Route::get('vehicles/live', [VehicleController::class, 'live']);
     Route::post('/locations', [LocationController::class, 'store']);
     Route::get('login-history', [LoginHistoryController::class, 'index']);
     Route::post('login-history', [LoginHistoryController::class, 'store']);
