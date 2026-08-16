@@ -24,7 +24,7 @@ class VehicleRequest extends FormRequest
             ],
             'model' => ['required', 'string', 'max:100'],
             'type' => ['required', 'string', Rule::in(['truck', 'van', 'car', 'motorcycle'])],
-            'status' => ['required', 'string', Rule::in(['idle', 'active', 'offline'])],
+            'status' => ['nullable', 'string', Rule::in(['idle', 'active', 'offline'])],
             'year' => ['required', 'integer', 'min:1900', 'max:' . (date('Y') + 1)],
         ];
     }
