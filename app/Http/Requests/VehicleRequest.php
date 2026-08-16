@@ -18,7 +18,7 @@ class VehicleRequest extends FormRequest
         $vehicleId = $this->route('vehicle');
 
         return [
-            'driver_id' => ['required', 'exists:users,id'],
+            'driver_id' => ['nullable', 'exists:users,id'],
             'plate_number' => ['required','string','max:20',
                 Rule::unique('vehicles', 'plate_number')->ignore($vehicleId),
             ],
