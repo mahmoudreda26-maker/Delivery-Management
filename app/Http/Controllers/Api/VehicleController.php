@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VehicleRequest;
+use App\Http\Requests\VehicleUpdateRequest;
 use App\Http\Resources\VehicleResource;
 use App\Services\VehicleService;
 use App\Traits\ApiResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class VehicleController extends Controller
 {
@@ -63,7 +64,7 @@ class VehicleController extends Controller
     }
 
    
-    public function update(VehicleRequest $request, string $id): JsonResponse
+    public function update(VehicleUpdateRequest $request, string $id): JsonResponse
     {
        
         $updated = $this->vehicleService->updateVehicle($id, $request->validated());

@@ -16,9 +16,9 @@ class StoreLocationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'latitude'  => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'speed'     => 'nullable|numeric',
+            'latitude'  => ['required' , 'numeric'],
+            'longitude' => ['required' , 'numeric'],
+            'speed'     => ['required' , 'numeric'],
         ];
     }
 }
