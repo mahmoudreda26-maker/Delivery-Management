@@ -56,9 +56,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function vehicles()
+    public function vehicle()
     {
-        return $this->hasMany(Vehicle::class);
+        return $this->hasOne(Vehicle::class);
     }
 
     public function locations()

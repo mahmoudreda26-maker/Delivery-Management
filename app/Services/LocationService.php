@@ -16,13 +16,13 @@ class LocationService
     {
         $user = Auth::user();
 
-        if ($user->vehicles->isEmpty()) {
+        if ($user->vehicle) {
             throw ValidationException::withMessages([
                 'vehicle' => ['The current user does not have a vehicle.'],
             ]);
         }
 
-        $vehicle = $user->vehicles->first();
+        $vehicle = $user->vehicle;
 
         $location = Location::create([
             'user_id'    => $user->id,

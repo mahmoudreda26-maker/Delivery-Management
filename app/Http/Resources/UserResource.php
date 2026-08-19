@@ -19,12 +19,7 @@ class UserResource extends JsonResource
          'email'=> $this->email,
          'phone' => $this->phone,
          'role' =>$this->role,
-         'vehicles' => $this->vehicles->map(function ($vehicle) {
-                return [
-                    'id' => $vehicle->id ,
-                    'plate_number' => $vehicle->plate_number,
-                ];
-            }),
+         'vehicle_id' => $this->vehicle?->id ,
         ];
     }
 }

@@ -21,16 +21,7 @@ class DriverResource extends JsonResource
             'phone' => $this->phone,
             'role' => $this->role,
             'is_active' => $this->is_active,
-            'vehicles' => $this->vehicles->map(function ($vehicle) {
-                return [
-                    'id' => $vehicle->id ,
-                    'plate_number' => $vehicle->plate_number,
-                    'model' => $vehicle->model,
-                    'type' => $vehicle->type,
-                    'status' => $vehicle->status,
-                    'year' => $vehicle->year,
-                ];
-            }),
+            'vehicle_id' => $this->vehicle?->id,
         ];
     }
 }
