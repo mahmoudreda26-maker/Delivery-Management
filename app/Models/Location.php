@@ -16,6 +16,9 @@ class Location extends Model
         'latitude',
         'longitude',
         'speed',
+        'accuracy',
+        'heading',
+        'recorded_at',
     ];
 
     public function user()

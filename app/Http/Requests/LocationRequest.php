@@ -2,30 +2,24 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LocationRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            'latitude' => ['required','numeric'],
-            'longitude' => ['required','numeric'],
-            'speed' => ['required','numeric'],
+            'latitude' => ['required', 'numeric'],
+            'longitude' => ['required', 'numeric'],
+            'speed' => ['required', 'numeric'],
+            'accuracy' => ['nullable', 'numeric'],
+            'heading' => ['required', 'numeric', 'between:0,360'],
+            'recorded_at' => ['required', 'date'],
         ];
     }
 }

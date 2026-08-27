@@ -15,12 +15,15 @@ class LocationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'user_id' => $this->user_id,
+            'id' => $this->id,
+            'driver_id' => $this->user_id,
             'vehicle_id' => $this->vehicle_id,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
+            'accuracy' => $this->accuracy,
             'speed' => $this->speed,
-
+            'heading' => $this->heading,
+            'recorded_at' => $this->recorded_at,
         ];
     }
 }

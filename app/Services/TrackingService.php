@@ -31,7 +31,9 @@ class TrackingService
             'latitude'    => $data['latitude'],
             'longitude'   => $data['longitude'],
             'speed'       => $data['speed'] ?? 0,
-            'recorded_at' => now(),
+            'accuracy'    => $data['accuracy'] ?? 0,
+            'heading'     => $data['heading'] ?? 0,
+            'recorded_at' => $data['recorded_at'] ?? now(),
         ]);
 
         $vehicle->update([

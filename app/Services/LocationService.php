@@ -16,7 +16,7 @@ class LocationService
     {
         $user = Auth::user();
 
-        if ($user->vehicle) {
+        if (!$user->vehicle) {
             throw ValidationException::withMessages([
                 'vehicle' => ['The current user does not have a vehicle.'],
             ]);
@@ -30,6 +30,9 @@ class LocationService
             'latitude'   => $data['latitude'],
             'longitude'  => $data['longitude'],
             'speed'      => $data['speed'],
+            'accuracy'   => $data['accuracy'],
+            'heading'    => $data['heading'],
+            'recorded_at' => $data['recorded_at'],
         ]);
 
         $vehicle->update([

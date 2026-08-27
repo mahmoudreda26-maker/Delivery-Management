@@ -9,15 +9,15 @@ use App\Http\Controllers\Api\VehicleController;
 use App\Models\FailedLoginAttempt;
 use Illuminate\Support\Facades\Route;
 
-
-
 Route::prefix('auth')->group(function () {
 
     Route::post('/login', [AuthController::class, 'login'])
         ->middleware('throttle:login');
+
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
+
         Route::get('/activity-logs', [ActivityLogController::class, 'index']);
         Route::get('/activity-logs/{activityLog}', [ActivityLogController::class, 'show']);
     });
@@ -31,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('vehicles', VehicleController::class);
     Route::patch('vehicles/{id}/assign', [VehicleController::class, 'assignDriver']);
     Route::get('vehicles/live', [VehicleController::class, 'live']);
-    Route::post('/locations', [LocationController::class, 'store']);
+
     Route::get('login-history', [LoginHistoryController::class, 'index']);
     Route::post('login-history', [LoginHistoryController::class, 'store']);
     Route::get('login-history/last', [LoginHistoryController::class, 'show']);
@@ -42,8 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('failed-attempt/old', [FailedLoginAttempt::class, 'destroy']);
 });
 
-
 Route::middleware(['auth:sanctum', 'role:driver'])->group(function () {
+
     Route::post('/locations', [LocationController::class, 'store']);
     Route::get('/locations/history', [LocationController::class, 'history']);
 });
