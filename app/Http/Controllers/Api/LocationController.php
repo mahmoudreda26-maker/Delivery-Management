@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LocationHistoryRequest;
 use App\Http\Requests\LocationRequest;
 use App\Http\Resources\LocationResource;
+use App\Models\Location;
 use App\Models\Vehicle;
 use App\Services\LocationService;
 use App\Traits\ApiResponse;
@@ -19,10 +20,10 @@ class LocationController extends Controller
     {
         $data = $locationService->store($request->validated());
 
-        $vehicle = Vehicle::where('user_id', auth()->id())->first();
+        $location = Location::where('user_id', auth()->id())->first();
 
-        if ($vehicle) {
-            event(new LocationUpdated($vehicle));
+        if ($location) {
+            event(new LocationUpdated($location));
         }
 
         return $this->success(
