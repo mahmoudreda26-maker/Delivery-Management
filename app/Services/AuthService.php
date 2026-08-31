@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\SendWelcomeEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class AuthService
         $user = Auth::user();
 
         $token = $user->createToken('auth_token')->plainTextToken;
-
+        //  SendWelcomeEmail::dispatch();
         $loginHistoryServiec->store($user, $request);
 
         $refreshToken = $refreshTokenService->issue($user);
