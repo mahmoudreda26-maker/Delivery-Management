@@ -27,7 +27,7 @@ class TrackingService
 
         $location = Location::create([
             'vehicle_id'  => $vehicle->id,
-            'driver_id'   => $user->id,
+            'user_id'   => $user->id,
             'latitude'    => $data['latitude'],
             'longitude'   => $data['longitude'],
             'speed'       => $data['speed'] ?? 0,

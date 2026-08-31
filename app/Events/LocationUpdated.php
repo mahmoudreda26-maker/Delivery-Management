@@ -2,7 +2,8 @@
 
 namespace App\Events;
 
-use App\Http\Resources\VehicleResource;
+use App\Http\Resources\TrackingResource;
+use App\Models\Location;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -12,15 +13,13 @@ class LocationUpdated implements ShouldBroadcastNow
 {
     use Dispatchable, SerializesModels;
 
-    public $vehicle;
+    public $location;
 
-    public function __construct($vehicle)
+    public function __construct(Location $location)
     {
-       
-        $this->vehicle = $vehicle;
+        $this->location = $location;
     }
 
-   
     public function broadcastOn(): array
     {
         return [
@@ -28,17 +27,15 @@ class LocationUpdated implements ShouldBroadcastNow
         ];
     }
 
-   
     public function broadcastAs(): string
     {
         return 'LocationUpdated';
     }
 
-  
     public function broadcastWith(): array
     {
         return [
-            'vehicle' => new VehicleResource($this->vehicle)
+            'location' => new TrackingResource($this->location),
         ];
     }
 }
