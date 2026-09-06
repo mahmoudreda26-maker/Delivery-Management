@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
+use App\Events\VehicleAssigned;
 use App\Models\Vehicle;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class VehicleService
 {
@@ -88,6 +89,10 @@ class VehicleService
         $vehicle->user_id = $driverId;
         $vehicle->save();
 
+        $vehicle->load('driver');
+
+        event(new VehicleAssigned($vehicle->driver,$vehicle));
+
         $this->activityLogService->log(
             user: Auth::user(),
             subject: $vehicle,
@@ -96,7 +101,7 @@ class VehicleService
             request: request()
         );
 
-        return $vehicle->load('driver');
+        return $vehicle;
     }
 
     public function getLiveLocations()
