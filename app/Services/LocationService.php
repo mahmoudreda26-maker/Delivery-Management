@@ -3,58 +3,56 @@
 namespace App\Services;
 
 use App\Models\Location;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
+use App\Models\Vehicle;
 
 class LocationService
 {
-    public function __construct(
-        protected ActivityLogService $activityLogService
-    ) {}
-
-    public function store(array $data)
-    {
-        $user = Auth::user();
-
-        if (!$user->vehicle) {
-            throw ValidationException::withMessages([
-                'vehicle' => ['The current user does not have a vehicle.'],
-            ]);
-        }
-
-        $vehicle = $user->vehicle;
-
-        $location = Location::create([
-            'user_id'    => $user->id,
-            'vehicle_id' => $vehicle->id,
-            'latitude'   => $data['latitude'],
-            'longitude'  => $data['longitude'],
-            'speed'      => $data['speed'],
-            'accuracy'   => $data['accuracy'],
-            'heading'    => $data['heading'],
-            'recorded_at' => $data['recorded_at'],
-        ]);
-
-        $vehicle->update([
-            'status' => 'active',
-        ]);
-
-        $this->activityLogService->log(
-            user: $user,
-            subject: $location,
-            event: 'created',
-            description: 'Location created successfully.',
-            request: request()
-        );
-
-        return $location;
-    }
-
     public function history(array $data)
     {
         return Location::forVehicle($data['vehicle_id'])
             ->forDate($data['date'])
             ->oldest()
+            ->get();
+    }
+
+    public function latest(Vehicle $vehicle): ?Location
+    {
+        return Location::where('vehicle_id', $vehicle->id)
+            ->orderByDesc('recorded_at')
+            ->orderByDesc('id')
+            ->first();
+    }
+
+    public function latestLocations()
+    {
+        return Location::query()
+            ->whereNotExists(function ($query) {
+                $query->selectRaw(1)
+                    ->from('locations as newer')
+                    ->whereColumn(
+                        'newer.vehicle_id',
+                        'locations.vehicle_id'
+                    )
+                    ->where(function ($query) {
+                        $query->whereColumn(
+                            'newer.recorded_at',
+                            '>',
+                            'locations.recorded_at'
+                        )
+                        ->orWhere(function ($query) {
+                            $query->whereColumn(
+                                'newer.recorded_at',
+                                '=',
+                                'locations.recorded_at'
+                            )
+                            ->whereColumn(
+                                'newer.id',
+                                '>',
+                                'locations.id'
+                            );
+                        });
+                    });
+            })
             ->get();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\LocationUpdated;
 use App\Models\Location;
+use App\Models\TrackingSession;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
@@ -15,24 +16,44 @@ class TrackingService
         protected ActivityLogService $activityLogService
     ) {}
 
-    public function updateAndBroadcastLocation(User $user, array $data): Location
-    {
+    public function updateAndBroadcastLocation(
+        User $user,
+        array $data
+    ): Location {
+        
         $vehicle = Vehicle::where('user_id', $user->id)->first();
 
         if (!$vehicle) {
             throw ValidationException::withMessages([
-                'driver' => ['Driver does not have an assigned vehicle.'],
+                'driver' => [
+                    'Driver does not have an assigned vehicle.'
+                ],
+            ]);
+        }
+
+        $session = TrackingSession::where('driver_id', $user->id)
+            ->where('vehicle_id', $vehicle->id)
+            ->where('status', 'active')
+            ->latest('started_at')
+            ->first();
+
+        if (!$session) {
+            throw ValidationException::withMessages([
+                'session' => [
+                    'Driver does not have an active tracking session.'
+                ],
             ]);
         }
 
         $location = Location::create([
-            'vehicle_id'  => $vehicle->id,
-            'user_id'   => $user->id,
-            'latitude'    => $data['latitude'],
-            'longitude'   => $data['longitude'],
-            'speed'       => $data['speed'] ?? 0,
-            'accuracy'    => $data['accuracy'] ?? 0,
-            'heading'     => $data['heading'] ?? 0,
+            'tracking_session_id' => $session->id,
+            'vehicle_id' => $vehicle->id,
+            'user_id' => $user->id,
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
+            'speed' => $data['speed'] ?? 0,
+            'accuracy' => $data['accuracy'] ?? 0,
+            'heading' => $data['heading'] ?? 0,
             'recorded_at' => $data['recorded_at'] ?? now(),
         ]);
 
@@ -48,7 +69,7 @@ class TrackingService
             request: request()
         );
 
-        event(new LocationUpdated($vehicle));
+        event(new LocationUpdated($location));
 
         return $location;
     }

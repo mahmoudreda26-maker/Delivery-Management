@@ -7,12 +7,14 @@ use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Location extends Model
 {
     protected $fillable = [
         'user_id',
         'vehicle_id',
+        'tracking_session_id',
         'latitude',
         'longitude',
         'speed',
@@ -20,7 +22,6 @@ class Location extends Model
         'heading',
         'recorded_at',
     ];
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -41,7 +42,11 @@ class Location extends Model
         return $query->whereDate('created_at', $date);
     }
     public function activityLogs(): MorphMany
-{
-    return $this->morphMany(ActivityLog::class, 'subject');
-}
+    {
+        return $this->morphMany(ActivityLog::class, 'subject');
+    }
+    public function trackingSession(): BelongsTo
+    {
+        return $this->belongsTo(TrackingSession::class);
+    }
 }
