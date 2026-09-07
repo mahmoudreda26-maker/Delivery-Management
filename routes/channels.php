@@ -8,9 +8,5 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('vehicles', function (User $user) {
-    return true;
+    return $user->hasRole('manager');
 });
-
-// Broadcast::channel('vehicles', function (User $user) {
-//     return $user->role === 'manager';
-// });

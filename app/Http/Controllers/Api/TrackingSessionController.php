@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TrackingSessionRequest;
 use App\Http\Resources\LocationResource;
+use App\Http\Resources\TrackingResource;
 use App\Http\Resources\TrackingSessionResource;
 use App\Models\TrackingSession;
 use App\Services\TrackingSessionService;
@@ -94,7 +95,7 @@ class TrackingSessionController extends Controller
         );
 
         return $this->success(
-            LocationResource::collection($locations),
+          TrackingResource::collection($locations),
             'Tracking session locations retrieved successfully.'
         );
     }

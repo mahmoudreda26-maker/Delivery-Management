@@ -70,7 +70,7 @@ class LocationController extends Controller
         $locations = $locationService->latestLocations();
 
         return $this->success(
-            TrackingResource::collection($locations),
+           LocationResource::collection($locations),
             'Latest locations retrieved successfully.'
         );
     }

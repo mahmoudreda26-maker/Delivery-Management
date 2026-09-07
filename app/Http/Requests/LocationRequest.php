@@ -14,12 +14,12 @@ class LocationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'latitude' => ['required', 'numeric'],
-            'longitude' => ['required', 'numeric'],
-            'speed' => ['required', 'numeric'],
+            'latitude' => ['nullable', 'numeric'],
+            'longitude' => ['nullable', 'numeric'],
+            'speed' => ['nullable', 'numeric'],
             'accuracy' => ['nullable', 'numeric'],
-            'heading' => ['required', 'numeric', 'between:0,360'],
-            'recorded_at' => ['required', 'date'],
+            'heading' => ['nullable', 'numeric', 'between:0,360'],
+            'recorded_at' => ['nullable', 'date'],
         ];
     }
 }

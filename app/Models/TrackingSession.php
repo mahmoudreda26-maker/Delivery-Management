@@ -22,6 +22,7 @@ class TrackingSession extends Model
     protected $casts = [
         'started_at' => 'datetime',
         'ended_at' => 'datetime',
+        'total_distance' => 'float',
     ];
 
     public function driver(): BelongsTo
