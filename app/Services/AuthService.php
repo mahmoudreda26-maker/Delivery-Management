@@ -35,7 +35,7 @@ class AuthService
         $user = Auth::user();
 
         $token = $user->createToken('auth_token')->plainTextToken;
-        //  SendWelcomeEmail::dispatch();
+        
         $loginHistoryServiec->store($user, $request);
 
         $refreshToken = $refreshTokenService->issue($user);

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Events\TrackingSessionEnded;
+use App\Events\TrackingSessionStarted;
 use App\Models\TrackingSession;
 use App\Models\User;
 use App\Models\Vehicle;
@@ -12,7 +14,7 @@ class TrackingSessionService
 {
     public function start(User $driver, int $vehicleId): TrackingSession
     {
-        return DB::transaction(function () use ($driver, $vehicleId) {
+        $trackingSession = DB::transaction(function () use ($driver, $vehicleId) {
 
             $vehicle = Vehicle::find($vehicleId);
 
@@ -49,11 +51,15 @@ class TrackingSessionService
                 'status' => 'active',
             ]);
         });
+
+        event(new TrackingSessionStarted($trackingSession));
+
+        return $trackingSession;
     }
 
     public function end(User $driver): TrackingSession
     {
-        return DB::transaction(function () use ($driver) {
+        $trackingSession = DB::transaction(function () use ($driver) {
 
             $session = TrackingSession::where('driver_id', $driver->id)
                 ->where('status', 'active')
@@ -75,6 +81,9 @@ class TrackingSessionService
 
             return $session->fresh();
         });
+         event(new TrackingSessionEnded($trackingSession));
+
+        return $trackingSession;
     }
 
     public function active(User $driver): ?TrackingSession
@@ -91,8 +100,8 @@ class TrackingSessionService
             'driver',
             'vehicle',
         ])
-        ->latest('started_at')
-        ->get();
+            ->latest('started_at')
+            ->get();
     }
 
     public function getLocations(TrackingSession $session)

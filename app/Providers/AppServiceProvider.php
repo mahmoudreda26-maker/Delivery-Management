@@ -3,7 +3,13 @@
 namespace App\Providers;
 
 use App\Events\LocationUpdated;
+use App\Events\TrackingSessionEnded;
+use App\Events\TrackingSessionStarted;
+use App\Events\VehicleInactive;
 use App\Listeners\ProcessLocationListener;
+use App\Listeners\SendTrackingSessionEndedNotification;
+use App\Listeners\SendTrackingSessionStartedNotification;
+use App\Listeners\SendVehicleInactiveNotification;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
@@ -28,6 +34,16 @@ class AppServiceProvider extends ServiceProvider
             LocationUpdated::class,
             ProcessLocationListener::class
         );
+        Event::listen(
+            TrackingSessionStarted::class,
+            SendTrackingSessionStartedNotification::class
+        );
+
+        Event::listen(
+            TrackingSessionEnded::class,
+            SendTrackingSessionEndedNotification::class
+        );
+
 
         RateLimiter::for('login', function ($request) {
             return Limit::perMinute(5)

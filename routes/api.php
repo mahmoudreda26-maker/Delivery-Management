@@ -5,10 +5,12 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\LoginHistoryController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\TrackingSessionController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Models\FailedLoginAttempt;
 use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('auth')->group(function () {
 
@@ -32,7 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('vehicles', VehicleController::class);
 
-    Route::patch('vehicles/{id}/assign',[VehicleController::class, 'assignDriver']);
+    Route::patch('vehicles/{id}/assign', [VehicleController::class, 'assignDriver']);
 
     Route::get('login-history', [LoginHistoryController::class, 'index']);
     Route::post('login-history', [LoginHistoryController::class, 'store']);
@@ -66,4 +68,17 @@ Route::middleware(['auth:sanctum', 'role:manager'])->group(function () {
     Route::get('/vehicles/latest-locations', [LocationController::class, 'latestLocations']);
 
     Route::get('/vehicles/{vehicle}/latest-location', [LocationController::class, 'latest']);
+});
+
+Route::middleware(['auth:sanctum', 'role:manager'])->group(function () {
+
+    Route::get('/notifications', [NotificationController::class, 'index']);
+
+    Route::get('/notifications/unread', [NotificationController::class, 'unread']);
+
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead']);
+
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+
+    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy']);
 });
