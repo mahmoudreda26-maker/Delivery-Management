@@ -27,7 +27,7 @@ class TrackingSession extends Model
 
     public function driver(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'driver_id');
+        return $this->belongsTo(User::class);
     }
 
     public function vehicle(): BelongsTo

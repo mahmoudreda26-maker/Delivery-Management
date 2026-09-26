@@ -14,11 +14,11 @@ class TrackingSessionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'vehicle_id' => [
-                'required',
-                'integer',
-                'exists:vehicles,id',
-            ],
+            // 'vehicle_id' => [
+            //     'required',
+            //     'integer',
+            //     'exists:vehicles,id',
+            // ],
         ];
     }
 }

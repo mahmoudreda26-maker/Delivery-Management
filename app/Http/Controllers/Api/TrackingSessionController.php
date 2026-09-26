@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TrackingSessionRequest;
-use App\Http\Resources\LocationResource;
 use App\Http\Resources\TrackingResource;
 use App\Http\Resources\TrackingSessionResource;
 use App\Models\TrackingSession;
@@ -26,15 +25,16 @@ class TrackingSessionController extends Controller
     ): JsonResponse {
 
         $session = $this->trackingSessionService->start(
-            $request->user(),
-            $request->validated('vehicle_id')
+            $request->user()
         );
 
         return $this->success(
-            new TrackingSessionResource($session->load([
-                'driver',
-                'vehicle',
-            ])),
+            new TrackingSessionResource(
+                $session->load([
+                    'driver',
+                    'vehicle',
+                ])
+            ),
             'Tracking session started successfully.',
             201
         );
@@ -47,10 +47,12 @@ class TrackingSessionController extends Controller
         );
 
         return $this->success(
-            new TrackingSessionResource($session->load([
-                'driver',
-                'vehicle',
-            ])),
+            new TrackingSessionResource(
+                $session->load([
+                    'driver',
+                    'vehicle',
+                ])
+            ),
             'Tracking session ended successfully.'
         );
     }
@@ -70,7 +72,10 @@ class TrackingSessionController extends Controller
 
         return $this->success(
             new TrackingSessionResource(
-                $session->load(['driver', 'vehicle'])
+                $session->load([
+                    'driver',
+                    'vehicle',
+                ])
             ),
             'Active tracking session retrieved successfully.'
         );
@@ -87,16 +92,20 @@ class TrackingSessionController extends Controller
     }
 
     public function locations(
+        Request $request,
         TrackingSession $trackingSession
     ): JsonResponse {
 
-        $locations = $this->trackingSessionService->getLocations(
-            $trackingSession
+        $perPage = min(
+            max((int) $request->query('per_page', 20), 1),
+            50
         );
 
-        return $this->success(
-          TrackingResource::collection($locations),
-            'Tracking session locations retrieved successfully.'
+        $locations = $this->trackingSessionService->getLocations(
+            $trackingSession,
+            $perPage
         );
+
+        return $this->paginated($locations);
     }
 }

@@ -2,81 +2,41 @@
 
 namespace App\Services;
 
-use App\Models\User;
+use App\Repositories\DriverRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class DriverService
 {
-    public function __construct(
-        protected ActivityLogService $activityLogService
-    ) {}
-
+    public function __construct(protected ActivityLogService $activityLogService, protected DriverRepository $driverRepository) {}
     public function getDrivers()
     {
-        return User::where('role', 'driver')->paginate(10);
+        return $this->driverRepository->getDrivers();
     }
-
     public function getDriver(string $id)
     {
-        return User::where('role', 'driver')->findOrFail($id);
+        return $this->driverRepository->getDriver($id);
     }
-
     public function addDriver(array $data)
     {
-        $driver = User::create([
-            'name'      => $data['name'],
-            'email'     => $data['email'],
-            'password'  => Hash::make($data['password']),
-            'phone'     => $data['phone'] ?? null,
-            'role'      => 'driver',
-            'is_active' => $data['is_active'],
-        ]);
-
-        $this->activityLogService->log(
-            user: Auth::user(),
-            subject: $driver,
-            event: 'created',
-            description: 'Driver created successfully.',
-            request: request()
-        );
-
+        $data['password'] = Hash::make($data['password']);
+        $driver = $this->driverRepository->addDriver($data);
+        $this->activityLogService->log(user: Auth::user(), subject: $driver, event: 'created', description: 'Driver created successfully.', request: request());
         return $driver;
     }
-
     public function updateDriver(array $data, string $id)
     {
-        $driver = User::where('role', 'driver')->findOrFail($id);
-
         if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }
-
-        $driver->update($data);
-
-        $this->activityLogService->log(
-            user: Auth::user(),
-            subject: $driver,
-            event: 'updated',
-            description: 'Driver updated successfully.',
-            request: request()
-        );
-
-        return $driver->fresh();
+        $driver = $this->driverRepository->updateDriver($data, $id);
+        $this->activityLogService->log(user: Auth::user(), subject: $driver, event: 'updated', description: 'Driver updated successfully.', request: request());
+        return $driver;
     }
-
     public function deleteDriver(string $id)
     {
-        $driver = User::where('role', 'driver')->findOrFail($id);
-
-        $this->activityLogService->log(
-            user: Auth::user(),
-            subject: $driver,
-            event: 'deleted',
-            description: 'Driver deleted successfully.',
-            request: request()
-        );
-
-        $driver->delete();
+        $driver = $this->driverRepository->getDriver($id);
+        $this->activityLogService->log(user: Auth::user(), subject: $driver, event: 'deleted', description: 'Driver deleted successfully.', request: request());
+        return $this->driverRepository->deleteDriver($id);
     }
 }

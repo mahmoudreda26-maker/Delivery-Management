@@ -6,35 +6,33 @@ use App\Events\TrackingSessionEnded;
 use App\Events\TrackingSessionStarted;
 use App\Models\TrackingSession;
 use App\Models\User;
-use App\Models\Vehicle;
+
+use App\Repositories\TrackingSessionRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class TrackingSessionService
 {
-    public function start(User $driver, int $vehicleId): TrackingSession
-    {
-        $trackingSession = DB::transaction(function () use ($driver, $vehicleId) {
+    public function __construct(
+        protected TrackingSessionRepository $trackingSessionRepository
+    ) {}
 
-            $vehicle = Vehicle::find($vehicleId);
+    public function start(User $driver): TrackingSession
+    {
+        $trackingSession = DB::transaction(function () use ($driver) {
+
+            $vehicle = $driver->vehicle;
 
             if (!$vehicle) {
                 throw ValidationException::withMessages([
-                    'vehicle_id' => ['Vehicle not found.'],
-                ]);
-            }
-
-            if ($vehicle->user_id !== $driver->id) {
-                throw ValidationException::withMessages([
-                    'vehicle_id' => [
-                        'This vehicle is not assigned to the current driver.'
+                    'vehicle' => [
+                        'No vehicle is assigned to the current driver.'
                     ],
                 ]);
             }
 
-            $activeSession = TrackingSession::where('driver_id', $driver->id)
-                ->where('status', 'active')
-                ->first();
+            $activeSession = $this->trackingSessionRepository->active($driver);
 
             if ($activeSession) {
                 throw ValidationException::withMessages([
@@ -44,12 +42,7 @@ class TrackingSessionService
                 ]);
             }
 
-            return TrackingSession::create([
-                'driver_id' => $driver->id,
-                'vehicle_id' => $vehicle->id,
-                'started_at' => now(),
-                'status' => 'active',
-            ]);
+            return $this->trackingSessionRepository->start($driver);
         });
 
         event(new TrackingSessionStarted($trackingSession));
@@ -61,10 +54,7 @@ class TrackingSessionService
     {
         $trackingSession = DB::transaction(function () use ($driver) {
 
-            $session = TrackingSession::where('driver_id', $driver->id)
-                ->where('status', 'active')
-                ->latest('started_at')
-                ->first();
+            $session = $this->trackingSessionRepository->active($driver);
 
             if (!$session) {
                 throw ValidationException::withMessages([
@@ -74,41 +64,32 @@ class TrackingSessionService
                 ]);
             }
 
-            $session->update([
-                'ended_at' => now(),
-                'status' => 'completed',
-            ]);
-
-            return $session->fresh();
+            return $this->trackingSessionRepository->end($driver);
         });
-         event(new TrackingSessionEnded($trackingSession));
+
+        event(new TrackingSessionEnded($trackingSession));
 
         return $trackingSession;
     }
 
     public function active(User $driver): ?TrackingSession
     {
-        return TrackingSession::where('driver_id', $driver->id)
-            ->where('status', 'active')
-            ->latest('started_at')
-            ->first();
+        return $this->trackingSessionRepository->active($driver);
     }
 
     public function getAll()
     {
-        return TrackingSession::with([
-            'driver',
-            'vehicle',
-        ])
-            ->latest('started_at')
-            ->get();
+        return $this->trackingSessionRepository->getAll();
     }
 
-    public function getLocations(TrackingSession $session)
-    {
-        return $session->locations()
-            ->orderBy('recorded_at')
-            ->orderBy('id')
-            ->get();
+    public function getLocations(
+        TrackingSession $session,
+        int $perPage = 20
+    ): LengthAwarePaginator {
+        return $this->trackingSessionRepository->getLocations(
+            $session,
+            $perPage
+        );
     }
 }
+
