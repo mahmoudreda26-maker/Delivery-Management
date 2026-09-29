@@ -34,4 +34,14 @@ class TrackingSessionRepository
     {
         return $session->locations()->orderBy('recorded_at')->orderBy('id')->paginate($perPage);
     }
+    public function findSessionForLocation(int $driverId,string $recordedAt): ?TrackingSession {
+        return TrackingSession::query()
+            ->where('driver_id', $driverId)
+            ->where('started_at', '<=', $recordedAt)
+            ->where(function ($query) use ($recordedAt) {
+                $query->whereNull('ended_at')
+                    ->orWhere('ended_at', '>=', $recordedAt);
+            })
+            ->first();
+    }
 }

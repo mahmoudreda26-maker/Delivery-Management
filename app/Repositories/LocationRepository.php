@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Location;
+
 use App\Models\Vehicle;
 
 class LocationRepository
@@ -52,4 +53,17 @@ class LocationRepository
             })
             ->get();
     }
-}
+
+     public function findByClientUuid(string $clientUuid): ?Location
+    {
+        return Location::where('client_uuid', $clientUuid)->first();
+    }
+
+    public function create(array $data): Location
+    {
+        return Location::create($data);
+    }
+    
+
+    }
+

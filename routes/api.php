@@ -57,6 +57,8 @@ Route::middleware(['auth:sanctum', 'role:driver'])->group(function () {
     Route::post('/locations', [LocationController::class, 'store']);
 
     Route::get('/locations/history', [LocationController::class, 'history']);
+
+    Route::post('/locations/sync', [LocationController::class, 'sync']);
 });
 
 Route::middleware(['auth:sanctum', 'role:manager'])->group(function () {

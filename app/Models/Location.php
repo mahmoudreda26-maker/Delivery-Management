@@ -14,6 +14,7 @@ class Location extends Model
     protected $fillable = [
         'user_id',
         'vehicle_id',
+        'client_uuid',
         'tracking_session_id',
         'latitude',
         'longitude',
@@ -21,6 +22,7 @@ class Location extends Model
         'accuracy',
         'heading',
         'recorded_at',
+        'received_at',
     ];
     public function user()
     {

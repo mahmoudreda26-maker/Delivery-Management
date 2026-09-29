@@ -11,6 +11,7 @@ use App\Models\Vehicle;
 use App\Services\LocationService;
 use App\Services\TrackingService;
 use App\Traits\ApiResponse;
+use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
@@ -70,8 +71,19 @@ class LocationController extends Controller
         $locations = $locationService->latestLocations();
 
         return $this->success(
-           LocationResource::collection($locations),
+            LocationResource::collection($locations),
             'Latest locations retrieved successfully.'
+        );
+    }
+    public function sync(Request $request ,LocationService $locationService)
+    {
+        $result = $locationService->syncLocations(
+            $request->input('locations')
+        );
+
+        return $this->success(
+            $result,
+            'Locations synced successfully.'
         );
     }
 }
