@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Repositories;
-
+use Illuminate\Pagination\CursorPaginator;
 use App\Models\TrackingSession;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -30,11 +30,37 @@ class TrackingSessionRepository
     {
         return TrackingSession::with(['driver', 'vehicle',])->latest('started_at')->get();
     }
-    public function getLocations(TrackingSession $session, int $perPage = 20): LengthAwarePaginator
-    {
-        return $session->locations()->orderBy('recorded_at')->orderBy('id')->paginate($perPage);
+
+    public function getLocations(
+        TrackingSession $session,
+        int $limit = 500,
+        ?string $from = null,
+        ?string $to = null,
+        ?string $cursor = null
+    ): CursorPaginator {
+        return $session->locations()
+            ->when(
+                $from,
+                fn($query) =>
+                $query->where('recorded_at', '>=', $from)
+            )
+            ->when(
+                $to,
+                fn($query) =>
+                $query->where('recorded_at', '<=', $to)
+            )
+            ->orderBy('recorded_at', 'asc')
+            ->orderBy('id', 'asc')
+            ->cursorPaginate(
+                $limit,
+                ['*'],
+                'cursor',
+                $cursor
+            );
     }
-    public function findSessionForLocation(int $driverId,string $recordedAt): ?TrackingSession {
+
+    public function findSessionForLocation(int $driverId, string $recordedAt): ?TrackingSession
+    {
         return TrackingSession::query()
             ->where('driver_id', $driverId)
             ->where('started_at', '<=', $recordedAt)

@@ -14,16 +14,25 @@ class TrackingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-         return [
-            'id' => $this->id,
-            'driver_id' => $this->user_id,
-            'vehicle_id' => $this->vehicle_id,
-            'latitude' => $this->latitude,
-            'longitude' => $this->longitude,
-            'accuracy' => $this->accuracy,
-            'speed' => $this->speed,
-            'heading' => $this->heading,
-            'recorded_at' => $this->recorded_at,
+        return [
+            'vehicle' => [
+                'vehicle_id' => $this->vehicle_id,
+                'plate_number' => $this->vehicle->plate_number,
+            ],
+
+            'driver' => [
+                'driver_id' => $this->user_id,
+                'driver_name' => $this->user->name,
+            ],
+
+            'location' => [
+                'latitude' => $this->latitude,
+                'longitude' => $this->longitude,
+                'accuracy' => $this->accuracy,
+                'speed' => $this->speed,
+                'heading' => $this->heading,
+                'recorded_at' => $this->recorded_at,
+            ],
         ];
     }
 }

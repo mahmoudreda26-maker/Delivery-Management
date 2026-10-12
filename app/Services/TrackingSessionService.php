@@ -6,7 +6,7 @@ use App\Events\TrackingSessionEnded;
 use App\Events\TrackingSessionStarted;
 use App\Models\TrackingSession;
 use App\Models\User;
-
+use Illuminate\Pagination\CursorPaginator;
 use App\Repositories\TrackingSessionRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -82,14 +82,20 @@ class TrackingSessionService
         return $this->trackingSessionRepository->getAll();
     }
 
+
     public function getLocations(
         TrackingSession $session,
-        int $perPage = 20
-    ): LengthAwarePaginator {
+        int $limit = 500,
+        ?string $from = null,
+        ?string $to = null,
+        ?string $cursor = null
+    ): CursorPaginator {
         return $this->trackingSessionRepository->getLocations(
             $session,
-            $perPage
+            $limit,
+            $from,
+            $to,
+            $cursor
         );
     }
 }
-

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TrackingSessionRequest;
+use App\Http\Resources\TrackingLocationResource;
 use App\Http\Resources\TrackingResource;
 use App\Http\Resources\TrackingSessionResource;
 use App\Models\TrackingSession;
@@ -95,17 +96,32 @@ class TrackingSessionController extends Controller
         Request $request,
         TrackingSession $trackingSession
     ): JsonResponse {
+        $validated = $request->validate([
+            'from' => ['nullable', 'date'],
+            'to' => ['nullable', 'date', 'after_or_equal:from'],
+            'cursor' => ['nullable', 'string'],
+            'limit' => ['nullable', 'integer', 'min:1', 'max:500'],
+        ]);
 
-        $perPage = min(
-            max((int) $request->query('per_page', 20), 1),
-            50
-        );
+        $limit = (int) ($validated['limit'] ?? 100);
 
         $locations = $this->trackingSessionService->getLocations(
             $trackingSession,
-            $perPage
+            $limit,
+            $validated['from'] ?? null,
+            $validated['to'] ?? null,
+            $validated['cursor'] ?? null
         );
 
-        return $this->paginated($locations);
+        return response()->json([
+            'success' => true,
+            'message' => 'Session locations retrieved successfully.',
+            'data' => TrackingLocationResource::collection(
+                collect($locations->items())
+            )->resolve($request),
+            'meta' => [
+                'next_cursor' => $locations->nextCursor()?->encode(),
+            ],
+        ]);
     }
 }
