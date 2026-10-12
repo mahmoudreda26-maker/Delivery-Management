@@ -97,8 +97,6 @@ class TrackingSessionController extends Controller
         TrackingSession $trackingSession
     ): JsonResponse {
         $validated = $request->validate([
-            'from' => ['nullable', 'date'],
-            'to' => ['nullable', 'date', 'after_or_equal:from'],
             'cursor' => ['nullable', 'string'],
             'limit' => ['nullable', 'integer', 'min:1', 'max:500'],
         ]);
@@ -108,8 +106,6 @@ class TrackingSessionController extends Controller
         $locations = $this->trackingSessionService->getLocations(
             $trackingSession,
             $limit,
-            $validated['from'] ?? null,
-            $validated['to'] ?? null,
             $validated['cursor'] ?? null
         );
 

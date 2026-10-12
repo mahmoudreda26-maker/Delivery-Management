@@ -84,18 +84,14 @@ class TrackingSessionService
 
 
     public function getLocations(
-        TrackingSession $session,
-        int $limit = 500,
-        ?string $from = null,
-        ?string $to = null,
-        ?string $cursor = null
-    ): CursorPaginator {
-        return $this->trackingSessionRepository->getLocations(
-            $session,
-            $limit,
-            $from,
-            $to,
-            $cursor
-        );
-    }
+    TrackingSession $session,
+    int $limit = 100,
+    ?string $cursor = null
+): CursorPaginator {
+    return $this->trackingSessionRepository->getLocations(
+        $session,
+        $limit,
+        $cursor
+    );
+}
 }

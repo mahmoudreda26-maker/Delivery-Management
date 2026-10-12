@@ -28,7 +28,7 @@ class TrackingLocationResource extends JsonResource
                 'accuracy' => $this->accuracy,
                 'speed' => $this->speed,
                 'heading' => $this->heading,
-                'recorded_at' => $this->recorded_at?->toISOString(),
+                'created_at' => $this->created_at?->toISOString(),
             ],
         ];
     }

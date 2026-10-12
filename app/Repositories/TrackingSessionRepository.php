@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories;
+
 use Illuminate\Pagination\CursorPaginator;
 use App\Models\TrackingSession;
 use App\Models\User;
@@ -33,30 +34,13 @@ class TrackingSessionRepository
 
     public function getLocations(
         TrackingSession $session,
-        int $limit = 500,
-        ?string $from = null,
-        ?string $to = null,
+        int $limit = 100,
         ?string $cursor = null
     ): CursorPaginator {
         return $session->locations()
-            ->when(
-                $from,
-                fn($query) =>
-                $query->where('recorded_at', '>=', $from)
-            )
-            ->when(
-                $to,
-                fn($query) =>
-                $query->where('recorded_at', '<=', $to)
-            )
             ->orderBy('recorded_at', 'asc')
             ->orderBy('id', 'asc')
-            ->cursorPaginate(
-                $limit,
-                ['*'],
-                'cursor',
-                $cursor
-            );
+            ->cursorPaginate($limit, ['*'], 'cursor', $cursor);
     }
 
     public function findSessionForLocation(int $driverId, string $recordedAt): ?TrackingSession
