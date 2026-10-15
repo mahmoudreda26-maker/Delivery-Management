@@ -15,11 +15,11 @@ class TrackingLocationResource extends JsonResource
             ],
 
             'driver' => [
-                'driver_id' => $this->driver_id,
+                'driver_id' => $this->user_id,
             ],
 
             'session' => [
-                'session_id' => $this->session_id,
+                'session_id' => $this->tracking_session_id,
             ],
 
             'location' => [

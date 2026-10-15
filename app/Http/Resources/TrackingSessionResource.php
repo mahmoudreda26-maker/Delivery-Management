@@ -13,8 +13,8 @@ class TrackingSessionResource extends JsonResource
             'id' => $this->id,
 
             'driver' => [
-                'id' => $this->driver?->id,
-                'name' => $this->driver?->name,
+                'id' => $this->user?->id,
+                'name' => $this->user?->name,
             ],
 
             'vehicle' => [

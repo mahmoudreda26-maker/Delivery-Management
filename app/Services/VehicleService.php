@@ -46,12 +46,25 @@ class VehicleService
     }
     public function assignDriver(string $vehicleId, string $driverId)
     {
-        $vehicle = $this->vehicleRepository->assignDriver($vehicleId, $driverId);
+        $vehicle = $this->vehicleRepository->assignDriver(
+            $vehicleId,
+            $driverId
+        );
+
         if (!$vehicle) {
             return null;
         }
-        event(new VehicleAssigned($vehicle->driver, $vehicle));
-        $this->activityLogService->log(user: Auth::user(), subject: $vehicle, event: 'driver_assigned', description: 'Driver assigned to vehicle.', request: request());
+
+        event(new VehicleAssigned($vehicle->user, $vehicle));
+
+        $this->activityLogService->log(
+            user: Auth::user(),
+            subject: $vehicle,
+            event: 'driver_assigned',
+            description: 'Driver assigned to vehicle.',
+            request: request()
+        );
+
         return $vehicle;
     }
     public function getLiveLocations()
