@@ -35,39 +35,33 @@ class VehicleRepository
         }
         return $vehicle->delete();
     }
+
     public function assignDriver(string $vehicleId, string $driverId): ?Vehicle
     {
-        // نبدأ Transaction لضمان تنفيذ عمليات نقل التعيين كوحدة واحدة
         return DB::transaction(function () use ($vehicleId, $driverId) {
 
-            // نبحث عن العربية المطلوبة باستخدام الـ ID
-            // lockForUpdate يقفل سجل العربية أثناء الـ Transaction
+            // قفل سجل العربية المطلوبة
             $vehicle = Vehicle::whereKey($vehicleId)
                 ->lockForUpdate()
                 ->first();
 
-            // لو العربية غير موجودة، نرجع null
             if (!$vehicle) {
                 return null;
             }
 
-            // نفك ارتباط أي عربية أخرى مرتبطة بالسائق الجديد
-            // نستثني العربية الحالية حتى لا نفصلها قبل تعيينها
+            // لو السائق مرتبط بعربية أخرى، نفك الارتباط
             Vehicle::where('user_id', $driverId)
                 ->where('id', '!=', $vehicle->id)
                 ->update(['user_id' => null]);
 
-            // نربط العربية المطلوبة بالسائق الجديد
+            // تعيين السائق الجديد للعربية
             $vehicle->user_id = $driverId;
-
-            // نحفظ التغيير في قاعدة البيانات
             $vehicle->save();
 
-            // نحمّل بيانات المستخدم المرتبط بالعربية
-            // العلاقة user معرفة في Vehicle Model
-            return $vehicle->load('user');
+            return $vehicle->fresh('user');
         });
     }
+
 
     public function getLiveLocations()
     {
