@@ -48,13 +48,10 @@ class VehicleRepository
             if (!$vehicle) {
                 return null;
             }
-
-            // لو السائق مرتبط بعربية أخرى، نفك الارتباط
             Vehicle::where('user_id', $driverId)
                 ->where('id', '!=', $vehicle->id)
                 ->update(['user_id' => null]);
 
-            // تعيين السائق الجديد للعربية
             $vehicle->user_id = $driverId;
             $vehicle->save();
 
