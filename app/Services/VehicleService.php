@@ -44,6 +44,7 @@ class VehicleService
         $this->activityLogService->log(user: Auth::user(), subject: $vehicle, event: 'deleted', description: 'Vehicle deleted successfully.', request: request());
         return $this->vehicleRepository->deleteVehicle($id);
     }
+
     public function assignDriver(string $vehicleId, string $driverId)
     {
         $vehicle = $this->vehicleRepository->assignDriver(
@@ -55,7 +56,7 @@ class VehicleService
             return null;
         }
 
-        event(new VehicleAssigned($vehicle->user, $vehicle));
+        event(new VehicleAssigned($vehicle->driver, $vehicle));
 
         $this->activityLogService->log(
             user: Auth::user(),
@@ -67,6 +68,7 @@ class VehicleService
 
         return $vehicle;
     }
+
     public function getLiveLocations()
     {
         return $this->vehicleRepository->getLiveLocations();

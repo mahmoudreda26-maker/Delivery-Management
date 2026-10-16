@@ -36,27 +36,20 @@ class VehicleRepository
         return $vehicle->delete();
     }
 
+
+
     public function assignDriver(string $vehicleId, string $driverId): ?Vehicle
     {
-        return DB::transaction(function () use ($vehicleId, $driverId) {
+        $vehicle = Vehicle::find($vehicleId);
 
-            // قفل سجل العربية المطلوبة
-            $vehicle = Vehicle::whereKey($vehicleId)
-                ->lockForUpdate()
-                ->first();
+        if (!$vehicle) {
+            return null;
+        }
 
-            if (!$vehicle) {
-                return null;
-            }
-            Vehicle::where('user_id', $driverId)
-                ->where('id', '!=', $vehicle->id)
-                ->update(['user_id' => null]);
+        $vehicle->user_id = $driverId;
+        $vehicle->save();
 
-            $vehicle->user_id = $driverId;
-            $vehicle->save();
-
-            return $vehicle->fresh('user');
-        });
+        return $vehicle->load('driver');
     }
 
 
